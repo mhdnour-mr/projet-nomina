@@ -14,7 +14,10 @@
       <td>{{ r['gender'] }}</td>
       <td>{{ r['birth_date'] }}</td>
       <td>{{ r['form_date'] }}</td>
-      <td><a href="/view/{{ r['id'] }}" class="btn btn-primary" style="padding:5px 14px; font-size:12px;">عرض</a></td>
+      <td>
+        <a href="/view/{{ r['id'] }}" class="btn btn-primary" style="padding:5px 14px; font-size:12px;">عرض</a>
+        <a href="/delete/{{ r['id'] }}" class="btn btn-secondary" style="padding:5px 14px; font-size:12px;" onclick="return confirm('هل تريد الحذف؟')">حذف</a>
+      </td>
     </tr>
     {% endfor %}
     </tbody>

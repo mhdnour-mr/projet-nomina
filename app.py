@@ -198,6 +198,15 @@ def view_form1(id):
     db.close()
     return render_template("view_form1.html", r=row)
 
+@app.route("/delete/<int:id>")
+@login_required
+def delete(id):
+    db = get_db()
+    db.execute("DELETE FROM form1_applicant WHERE id=?", (id,))
+    db.commit()
+    db.close()
+    return redirect(url_for("dashboard"))
+
 # ---------- EXPORT EXCEL ----------
 @app.route("/export")
 @login_required
