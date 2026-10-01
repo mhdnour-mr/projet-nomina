@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}استمارة البيانات الشخصية{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📋 استمارة البيانات الشخصية (1/3)</h2>
+  {% if errors %}
+  <div class="alert alert-success">
+    {% for e in errors %}
+    <p>⚠ {{ e }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group full"><label>الاسم الثلاثي الكامل *</label><input name="full_name" required></div>
+      <div class="form-group"><label>اسم الأم (الكامل)</label><input name="mother_name"></div>
+      <div class="form-group">
+        <label>الجنس</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="gender" value="ذكر"> ذكر</label>
+          <label><input type="radio" name="gender" value="أنثى"> أنثى</label>
+        </div>
+      </div>
+      <div class="form-group"><label>تاريخ الميلاد</label><input name="birth_date" placeholder="يوم/شهر/سنة"></div>
+      <div class="form-group"><label>البلد الأصلي</label><input name="birth_country"></div>
+      <div class="form-group"><label>مكان الإقامة</label><input name="residence"></div>
+      <div class="form-group"><label>الديانة</label><input name="religion"></div>
+      <div class="form-group"><label>الحالة الاجتماعية</label><input name="marital_status"></div>
+      <div class="form-group"><label>عدد الأولاد</label><input name="children_count" type="number"></div>
+      <div class="form-group">
+        <label>الوضع الصحي (سليم البنية؟)</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="health_status" value="سليم"> نعم</label>
+          <label><input type="radio" name="health_status" value="غير سليم"> لا</label>
+        </div>
+      </div>
+      <div class="form-group"><label>نوع الإصابة</label><input name="injury_type"></div>
+      <div class="form-group">
+        <label>الوضع الوظيفي الحالي</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="employment_status" value="أعمل"> أعمل</label>
+          <label><input type="radio" name="employment_status" value="لا أعمل"> لا أعمل</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الجاهزية للبدء بالعمل</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="ready_to_work" value="نعم"> نعم</label>
+          <label><input type="radio" name="ready_to_work" value="لا"> لا</label>
+        </div>
+      </div>
+      <div class="form-group"><label>قابلية السفر</label><input name="travel_allowed"></div>
+      <div class="form-group full"><label>العنوان الحالي المفصل</label><input name="address"></div>
+      <div class="form-group"><label>رقم الهاتف المحمول</label><input name="phone"></div>
+      <div class="form-group"><label>معرف تواصل (واتساب، تلغرام)</label><input name="whatsapp"></div>
+      <div class="form-group"><label>البريد الإلكتروني (فعّال)</label><input name="email"></div>
+      <div class="form-group"><label>التحصيل العلمي</label><input name="education"></div>
+      <div class="form-group"><label>الفرع</label><input name="field"></div>
+      <div class="form-group"><label>التخصص</label><input name="specialty"></div>
+      <div class="form-group"><label>اسم المؤسسة التعليمية</label><input name="institution"></div>
+      <div class="form-group"><label>معدل التخرج</label><input name="graduation_rate"></div>
+      <div class="form-group"><label>سنة التخرج</label><input name="graduation_year"></div>
+      <div class="form-group"><label>اسم جهة العمل</label><input name="work_name"></div>
+      <div class="form-group"><label>طبيعة العمل/المسمى الوظيفي</label><input name="work_title"></div>
+      <div class="form-group"><label>تاريخ البدء</label><input name="work_start" placeholder="يوم/شهر/سنة"></div>
+      <div class="form-group"><label>تاريخ الانتهاء</label><input name="work_end" placeholder="يوم/شهر/سنة"></div>
+      <div class="form-group full"><label>سبب ترك العمل</label><input name="work_reason"></div>
+      <div class="form-group"><label>نوع الدورة / المهارة</label><input name="course_type"></div>
+      <div class="form-group"><label>المستوى</label><input name="course_level"></div>
+      <div class="form-group"><label>مدة الدورة</label><input name="course_duration"></div>
+      <div class="form-group"><label>تاريخ الدورة</label><input name="course_date"></div>
+      <div class="form-group"><label>الجهة المانحة</label><input name="course_org"></div>
+      <div class="form-group"><label>وجود وثيقة؟</label><input name="course_doc"></div>
+      <div class="form-group"><label>التوقيع</label><input name="signature"></div>
+      <div class="form-group"><label>تاريخ تعبئة الإستمارة</label><input name="form_date" placeholder="يوم/شهر/سنة"></div>
+    </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">التالي ➜ استمارة اللجنة التخصصية</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

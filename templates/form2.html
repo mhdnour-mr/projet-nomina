@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}استمارة اللجنة التخصصية{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📋 استمارة اللجنة التخصصية (2/3)</h2>
+  <p style="color:#718096; margin-bottom:15px;">المتقدم: <strong>{{ app1['full_name'] if app1 else '#' ~ applicant_id }}</strong></p>
+  <form method="POST">
+    <input type="hidden" name="full_name" value="{{ app1['full_name'] if app1 else '' }}">
+    <div class="form-grid">
+      <div class="form-group"><label>رقم الاستمارة</label><input name="form_number"></div>
+      <div class="form-group"><label>تاريخ الاستمارة</label><input name="form_date" placeholder="يوم/شهر/سنة"></div>
+    </div>
+    <h3 style="margin-top:20px; color:#2b6cb0;">التقييم السلوكي والتوافق القيمي</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>الدافعية والالتزام</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="motivation" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="motivation" value="وسط"> وسط</label>
+          <label><input type="radio" name="motivation" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>العمل الجماعي</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="teamwork" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="teamwork" value="وسط"> وسط</label>
+          <label><input type="radio" name="teamwork" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>مهارات التواصل</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="communication" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="communication" value="وسط"> وسط</label>
+          <label><input type="radio" name="communication" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>حل المشكلات العامة</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="problem_solving" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="problem_solving" value="وسط"> وسط</label>
+          <label><input type="radio" name="problem_solving" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>المهنية واللباقة</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="professionalism" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="professionalism" value="وسط"> وسط</label>
+          <label><input type="radio" name="professionalism" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الثقة بالنفس وتحمل الضغط</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="confidence" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="confidence" value="وسط"> وسط</label>
+          <label><input type="radio" name="confidence" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>التنظيم والتخطيط</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="organization" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="organization" value="وسط"> وسط</label>
+          <label><input type="radio" name="organization" value="جيد"> جيد</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>التوافق مع قيم الوزارة</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="values_alignment" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="values_alignment" value="وسط"> وسط</label>
+          <label><input type="radio" name="values_alignment" value="جيد"> جيد</label>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin-top:20px; color:#2b6cb0;">التقييم الفني (المهارات / المعارف)</h3>
+    <div class="form-grid">
+      {% for i in range(1,7) %}
+      <div class="form-group">
+        <label>السؤال {{ i }}</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="tq{{ i }}" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="tq{{ i }}" value="وسط"> وسط</label>
+          <label><input type="radio" name="tq{{ i }}" value="جيد"> جيد</label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="form-group full" style="margin-top:14px;"><label>نقاط القوة</label><textarea name="strengths"></textarea></div>
+    <div class="form-group full"><label>نقاط الضعف/الفجوات</label><textarea name="weaknesses"></textarea></div>
+    <div class="form-group full"><label>توصية نهائية / ملاحظات</label><textarea name="recommendation"></textarea></div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">التالي ➜ استمارة اللجنة الإدارية</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

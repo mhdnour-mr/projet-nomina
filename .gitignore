@@ -1,0 +1,9 @@
+nomina.db
+server.log
+ngrok.log
+lt.log
+cookies.txt
+cookies2.txt
+__pycache__
+*.pyc
+.env

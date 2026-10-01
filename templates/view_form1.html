@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}عرض الاستمارة{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📄 تفاصيل الاستمارة #{{ r['id'] }}</h2>
+  <table class="info-table">
+    <tr><td>الاسم الثلاثي</td><td>{{ r['full_name'] }}</td></tr>
+    <tr><td>اسم الأم</td><td>{{ r['mother_name'] }}</td></tr>
+    <tr><td>الجنس</td><td>{{ r['gender'] }}</td></tr>
+    <tr><td>تاريخ الميلاد</td><td>{{ r['birth_date'] }}</td></tr>
+    <tr><td>البلد الأصلي</td><td>{{ r['birth_country'] }}</td></tr>
+    <tr><td>محل الإقامة</td><td>{{ r['residence'] }}</td></tr>
+    <tr><td>الديانة</td><td>{{ r['religion'] }}</td></tr>
+    <tr><td>الحالة الاجتماعية</td><td>{{ r['marital_status'] }}</td></tr>
+    <tr><td>عدد الأولاد</td><td>{{ r['children_count'] }}</td></tr>
+    <tr><td>الوضع الصحي</td><td>{{ r['health_status'] }}</td></tr>
+    <tr><td>نوع الإصابة</td><td>{{ r['injury_type'] }}</td></tr>
+    <tr><td>الوضع الوظيفي</td><td>{{ r['employment_status'] }}</td></tr>
+    <tr><td>الجاهزية للعمل</td><td>{{ r['ready_to_work'] }}</td></tr>
+    <tr><td>قابلية السفر</td><td>{{ r['travel_allowed'] }}</td></tr>
+    <tr><td>العنوان</td><td>{{ r['address'] }}</td></tr>
+    <tr><td>الهاتف</td><td>{{ r['phone'] }}</td></tr>
+    <tr><td>واتساب</td><td>{{ r['whatsapp'] }}</td></tr>
+    <tr><td>البريد</td><td>{{ r['email'] }}</td></tr>
+    <tr><td>التعليم</td><td>{{ r['education'] }}</td></tr>
+    <tr><td>الفرع</td><td>{{ r['field'] }}</td></tr>
+    <tr><td>التخصص</td><td>{{ r['specialty'] }}</td></tr>
+    <tr><td>المؤسسة</td><td>{{ r['institution'] }}</td></tr>
+    <tr><td>معدل التخرج</td><td>{{ r['graduation_rate'] }}</td></tr>
+    <tr><td>سنة التخرج</td><td>{{ r['graduation_year'] }}</td></tr>
+    <tr><td>جهة العمل</td><td>{{ r['work_name'] }}</td></tr>
+    <tr><td>المسمى الوظيفي</td><td>{{ r['work_title'] }}</td></tr>
+    <tr><td>تاريخ البدء / الانتهاء</td><td>{{ r['work_start'] }} / {{ r['work_end'] }}</td></tr>
+    <tr><td>سبب ترك العمل</td><td>{{ r['work_reason'] }}</td></tr>
+    <tr><td>الدورة / المهارة</td><td>{{ r['course_type'] }} - {{ r['course_level'] }}</td></tr>
+    <tr><td>مدة الدورة / التاريخ</td><td>{{ r['course_duration'] }} / {{ r['course_date'] }}</td></tr>
+    <tr><td>الجهة المانحة</td><td>{{ r['course_org'] }}</td></tr>
+    <tr><td>تاريخ التعبئة</td><td>{{ r['form_date'] }}</td></tr>
+    <tr><td>التوقيع</td><td>{{ r['signature'] }}</td></tr>
+  </table>
+  <div class="btn-group">
+    <a href="/dashboard" class="btn btn-secondary">← العودة</a>
+  </div>
+</div>
+{% endblock %}

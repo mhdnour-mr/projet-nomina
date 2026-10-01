@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}استمارة اللجنة الإدارية{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📋 استمارة اللجنة الإدارية (3/3)</h2>
+  <p style="color:#718096; margin-bottom:15px;">المتقدم: <strong>{{ app1['full_name'] if app1 else '#' ~ applicant_id }}</strong></p>
+  <form method="POST">
+    <input type="hidden" name="full_name" value="{{ app1['full_name'] if app1 else '' }}">
+    <div class="form-grid">
+      <div class="form-group"><label>التخصص المتقدم له</label><input name="specialty"></div>
+      <div class="form-group"><label>رقم الاستمارة</label><input name="form_number"></div>
+      <div class="form-group"><label>تاريخ الاستمارة</label><input name="form_date"></div>
+    </div>
+    <h3 style="margin-top:20px; color:#2b6cb0;">التحقق من الوثائق</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>شهادة التحصيل العلمي</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="degree_match" value="مطابق"> مطابق</label>
+          <label><input type="radio" name="degree_match" value="غير مطابق"> غير مطابق</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الخبرة المطلوبة</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="experience_required" value="مستوف"> مستوف</label>
+          <label><input type="radio" name="experience_required" value="غير مستوف"> غير مستوف</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>شهادات الخبرة المهنية</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="certs_exist" value="موجود"> موجود</label>
+          <label><input type="radio" name="certs_exist" value="غير موجود"> غير موجود</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>شهادات الدورات</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="courses_exist" value="موجود"> موجود</label>
+          <label><input type="radio" name="courses_exist" value="غير موجود"> غير موجود</label>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin-top:20px; color:#2b6cb0;">الوضع والمرونة</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>الوضع الوظيفي الحالي</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="employment_status" value="يعمل"> يعمل</label>
+          <label><input type="radio" name="employment_status" value="لايعمل"> لا يعمل</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>المرونة في تاريخ البدء</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="flexible_start" value="مرن"> مرن (شهر أو أقل)</label>
+          <label><input type="radio" name="flexible_start" value="غير مرن"> غير مرن</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>المرونة في ساعات العمل</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="flexible_hours" value="مرن"> مرن</label>
+          <label><input type="radio" name="flexible_hours" value="غير مرن"> غير مرن</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الاستعداد للتنقل والسفر</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="willing_to_travel" value="مستعد"> مستعد</label>
+          <label><input type="radio" name="willing_to_travel" value="غير مستعد"> غير مستعد</label>
+        </div>
+      </div>
+      <div class="form-group"><label>توقعات الراتب الإجمالية</label><input name="expected_salary"></div>
+      <div class="form-group">
+        <label>ضمن نطاق الميزانية؟</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="within_budget" value="نعم"> نعم</label>
+          <label><input type="radio" name="within_budget" value="لا"> لا</label>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin-top:20px; color:#2b6cb0;">التقييم السلوكي</h3>
+{% set fields = [("motivation","الدافعية والالتزام"),("teamwork","العمل الجماعي"),("communication","مهارات التواصل"),("appearance","المظهر العام واللباقة"),("confidence","الثقة بالنفس تحمل الضغط"),("organization","التنظيم والتخطيط"),("values_alignment","التوافق مع قيم الوزارة")] %}
+    {% for field in fields %}
+    <div class="form-grid">
+      <div class="form-group">
+        <label>{{ field[1] }}</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="{{ field[0] }}" value="ضعيف"> ضعيف</label>
+          <label><input type="radio" name="{{ field[0] }}" value="وسط"> وسط</label>
+          <label><input type="radio" name="{{ field[0] }}" value="جيد"> جيد</label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="form-group full" style="margin-top:14px;"><label>نقاط القوة</label><textarea name="strengths"></textarea></div>
+    <div class="form-group full"><label>نقاط الضعف/الفجوات</label><textarea name="weaknesses"></textarea></div>
+    <div class="form-group full"><label>توصية نهائية / ملاحظات</label><textarea name="recommendation"></textarea></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>توصية اللجنة الإدارية</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="committee_rec" value="مؤهل"> مؤهل</label>
+          <label><input type="radio" name="committee_rec" value="غير مؤهل"> غير مؤهل</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>الناحية الأمنية</label>
+        <div class="checkbox-group">
+          <label><input type="radio" name="security_status" value="سليم"> سليم</label>
+          <label><input type="radio" name="security_status" value="غير سليم"> غير سليم</label>
+        </div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-success">✅ إرسال الاستتمارة</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

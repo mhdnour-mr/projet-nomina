@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}نظام النماذج{% endblock %}</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; color: #222; direction: rtl; }
+.header { background: linear-gradient(135deg, #1a3a5c, #2b6cb0); color: #fff; padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 20px; }
+.header a { color: #fff; text-decoration: none; margin-right: 15px; font-size: 14px; }
+.header a:hover { text-decoration: underline; }
+.container { max-width: 950px; margin: 25px auto; padding: 0 15px; }
+.card { background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 25px; margin-bottom: 20px; }
+h2 { color: #1a3a5c; margin-bottom: 18px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #4a5568; }
+input, select, textarea { padding: 9px 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; font-family: inherit; direction: rtl; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,.15); }
+textarea { min-height: 70px; resize: vertical; }
+.checkbox-group { display: flex; gap: 15px; align-items: center; }
+.checkbox-group label { font-weight: 400; display: flex; align-items: center; gap: 5px; }
+.btn { display: inline-block; padding: 11px 28px; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; font-family: inherit; }
+.btn-primary { background: #2b6cb0; color: #fff; }
+.btn-primary:hover { background: #2c5282; }
+.btn-success { background: #38a169; color: #fff; }
+.btn-success:hover { background: #2f855a; }
+.btn-secondary { background: #718096; color: #fff; }
+.btn-secondary:hover { background: #4a5568; }
+.btn-group { margin-top: 20px; display: flex; gap: 10px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+th { background: #edf2f7; color: #2d3748; }
+tr:hover { background: #f7fafc; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: #ebf8ff; color: #2b6cb0; }
+.badge-green { background: #f0fff4; color: #38a169; }
+.stats { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+.stat-card { flex: 1; min-width: 140px; background: #fff; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.stat-card .num { font-size: 32px; font-weight: 700; color: #2b6cb0; }
+.stat-card .label { font-size: 13px; color: #718096; margin-top: 4px; }
+.alert { padding: 12px 18px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
+.alert-success { background: #f0fff4; color: #22543d; border: 1px solid #c6f6d5; }
+.info-table td { padding: 8px 12px; border-bottom: 1px solid #edf2f7; }
+.info-table td:first-child { font-weight: 600; color: #4a5568; width: 200px; }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>⚙ نظام النماذج الإلكترونية</h1>
+  <div>
+    <a href="/">🏠 الرئيسية</a>
+    <a href="/dashboard">📋 القائمة</a>
+    <a href="/export">📥 تصدير Excel</a>
+  </div>
+</div>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}القائمة{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📋 الاستمارات المعبأة ({{ rows|length }})</h2>
+  {% if rows %}
+  <table>
+    <thead><tr><th>#</th><th>الاسم</th><th>الجنس</th><th>تاريخ الميلاد</th><th>تاريخ التعبئة</th><th>إجراء</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r['id'] }}</td>
+      <td>{{ r['full_name'] }}</td>
+      <td>{{ r['gender'] }}</td>
+      <td>{{ r['birth_date'] }}</td>
+      <td>{{ r['form_date'] }}</td>
+      <td><a href="/view/{{ r['id'] }}" class="btn btn-primary" style="padding:5px 14px; font-size:12px;">عرض</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color:#718096; text-align:center; padding:20px;">لا توجد بيانات بعد.</p>
+  {% endif %}
+</div>
+{% endblock %}
