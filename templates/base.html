@@ -54,8 +54,11 @@ tr:hover { background: #f7fafc; }
   <h1>⚙ نظام النماذج الإلكترونية</h1>
   <div>
     <a href="/">🏠 الرئيسية</a>
+    {% if session.get("logged_in") %}
     <a href="/dashboard">📋 القائمة</a>
-    <a href="/export">📥 تصدير Excel</a>
+    <a href="/export">📥 Excel</a>
+    <a href="/logout">🔐 خروج</a>
+    {% endif %}
   </div>
 </div>
 <div class="container">
