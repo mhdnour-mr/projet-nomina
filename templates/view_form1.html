@@ -39,7 +39,8 @@
     <tr><td>التوقيع</td><td>{{ r['signature'] }}</td></tr>
   </table>
   <div class="btn-group">
-    <a href="/dashboard" class="btn btn-secondary">← العودة</a>
-  </div>
+      <a href="/dashboard" class="btn btn-secondary">← العودة</a>
+      <a href="/delete/{{ r['id'] }}" class="btn btn-primary" onclick="return confirm('هل تريد حذف هذه الاستمارة؟')">🗑 حذف</a>
+    </div>
 </div>
 {% endblock %}
