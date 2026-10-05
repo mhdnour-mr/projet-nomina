@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}المتقدم {{ a1['id'] if a1 else '#' }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h2 style="display:flex;gap:12px;align-items:center;">
+    <span>📄 المتقدم: {{ a1['full_name'] if a1 else 'غير محدد' }}</span>
+    <span class="badge badge-blue">رقم الملف #{{ a1['id'] if a1 else '#' }}</span>
+  </h2>
+  {% if not a1 %}
+    <p style="color:#e53e62;">لا توجد بيانات للمتقدم رقم {{ id }}</p>
+  {% else %}
+    <table class="info-table" style="margin-bottom:8px;">
+      <tr><td>الاسم الثلاثي</td><td><strong>{{ a1['full_name'] }}</strong></td></tr>
+      <tr><td>اسم الأم</td><td>{{ a1['mother_name'] }}</td></tr>
+      <tr><td>الجنس</td><td>{{ a1['gender'] }}</td></tr>
+      <tr><td>تاريخ الميلاد</td><td>{{ a1['birth_date'] }}</td></tr>
+      <tr><td>البلد الأصلي</td><td>{{ a1['birth_country'] }}</td></tr>
+      <tr><td>محل الإقامة</td><td>{{ a1['residence'] }}</td></tr>
+      <tr><td>الديانة</td><td>{{ a1['religion'] }}</td></tr>
+      <tr><td>الحالة الاجتماعية</td><td>{{ a1['marital_status'] }} ({{ a1['children_count'] or 0 }} أطفال)</td></tr>
+      <tr><td>الوضع الصحي</td><td>{{ a1['health_status'] }}{% if a1['injury_type'] %} — {{ a1['injury_type'] }}{% endif %}</td></tr>
+      <tr><td>الوضع الوظيفي</td><td>{{ a1['employment_status'] }}</td></tr>
+      <tr><td>الجاهزية للعمل</td><td>{{ a1['ready_to_work'] }}</td></tr>
+      <tr><td>قابلية السفر</td><td>{{ a1['travel_allowed'] }}</td></tr>
+      <tr><td>العنوان</td><td>{{ a1['address'] }}</td></tr>
+      <tr><td>الهاتف</td><td>{{ a1['phone'] }}{% if a1['whatsapp'] %} (واتساب: {{ a1['whatsapp'] }}) {% endif %}</td></tr>
+      <tr><td>البريد</td><td>{{ a1['email'] }}</td></tr>
+      <tr><td>التعليم</td><td>{{ a1['education'] }} — {{ a1['field'] }} / {{ a1['specialty'] }} ({{ a1['institution'] }}) معدل {{ a1['graduation_rate'] }} عام {{ a1['graduation_year'] }}</td></tr>
+      <tr><td>جهة العمل الأخيرة</td><td>{{ a1['work_name'] }} — {{ a1['work_title'] }} ({{ a1['work_start'] }}–{{ a1['work_end'] }}) — {{ a1['work_reason'] }}</td></tr>
+      <tr><td>التدريب/الدورة</td><td>{{ a1['course_type'] }} — {{ a1['course_level'] }}، مدة {{ a1['course_duration'] }} بتاريخ {{ a1['course_date'] }} من {{ a1['course_org'] }}</td></tr>
+      <tr><td>تاريخ التعبئة</td><td>{{ a1['form_date'] }}</td></tr>
+      <tr><td>التوقيع</td><td>{{ a1['signature'] }}</td></tr>
+    </table>
+  {% endif %}
+</div>
+
+{% if a2 %}
+<div class="card">
+  <h2 style="color:#2b6cb0;">📋 استمارة اللجنة التخصصية (2/3)</h2>
+  <table class="info-table">
+    <tr><td>رقم الاستمارة</td><td>{{ a2['form_number'] }}</td><tr><td>تاريخها</td><td>{{ a2['form_date'] }}</td></tr>
+    <tr><td>التقييم السلوكي</td><td>الدافعية: {{ a2['motivation'] }} | العمل الجماعي: {{ a2['teamwork'] }} | التواصل: {{ a2['communication'] }} | حل المشكلات: {{ a2['problem_solving'] }} | المهنية: {{ a2['professionalism'] }} | الثقة: {{ a2['confidence'] }} | التنظيم: {{ a2['organization'] }} | التوافق القيمي: {{ a2['values_alignment'] }}</td></tr>
+    <tr><td>التقييم الفني</td><td>{{ a2['tech_scores'] if a2['tech_scores'] else '—' }}</td></tr>
+    <tr><td>نقاط القوة</td><td>{{ a2['strengths'] }}</td></tr>
+    <tr><td>نقاط الضعف</td><td>{{ a2['weaknesses'] }}</td></tr>
+    <tr><td>التوصية النهائية</td><td>{{ a2['recommendation'] }}</td></tr>
+  </table>
+</div>
+{% else %}
+<div class="card"><h2>📋 استمارة اللجنة التخصصية (2/3)</h2><p style="color:#718096;">لم تُعبأ بعد.</p></div>
+{% endif %}
+
+{% if a3 %}
+<div class="card">
+  <h2 style="color:#2b6cb0;">📋 استمارة اللجنة الإدارية (3/3)</h2>
+  <table class="info-table">
+    <tr><td>التخصص</td><td>{{ a3['specialty'] }}</td><tr><td>رقم الاستمارة</td><td>{{ a3['form_number'] }}</td><tr><td>تاريخها</td><td>{{ a3['form_date'] }}</td></tr>
+    <tr><td>التحقق من الوثائق</td><td>الشهادة: {{ a3['degree_match'] }} | الخبرة: {{ a3['experience_required'] }} | شهادات الخبرة: {{ a3['certs_exist'] }} | شهادات الدورات: {{ a3['courses_exist'] }}</td></tr>
+    <tr><td>الوضع والمرونة</td><td>العمل: {{ a3['employment_status'] }} | مرونة البدء: {{ a3['flexible_start'] }} | مرونة الساعات: {{ a3['flexible_hours'] }} | السفر: {{ a3['willing_to_travel'] }} | الراتب المتوقع: {{ a3['expected_salary'] }} | ضمن الميزانية: {{ a3['within_budget'] }}</td></tr>
+    <tr><td>التقييم السلوكي</td><td>الدافعية: {{ a3['motivation'] }} | العمل الجماعي: {{ a3['teamwork'] }} | التواصل: {{ a3['communication'] }} | المظهر: {{ a3['appearance'] }} | الثقة: {{ a3['confidence'] }} | التنظيم: {{ a3['organization'] }} | التوافق: {{ a3['values_alignment'] }}</td></tr>
+    <tr><td>نقاط القوة</td><td>{{ a3['strengths'] }}</td></tr>
+    <tr><td>نقاط الضعف</td><td>{{ a3['weaknesses'] }}</td></tr>
+    <tr><td>توصية اللجنة الإدارية</td><td>{{ a3['committee_rec'] }}</td></tr>
+    <tr><td>الناحية الأمنية</td><td>{{ a3['security_status'] }}</td></tr>
+    <tr><td>ملاحظات أخيرة</td><td>{{ a3['recommendation'] }}</td></tr>
+    <tr><td>تاريخ التعبئة</td><td>{{ a3['created_at'] }}</td></tr>
+  </table>
+</div>
+{% else %}
+<div class="card"><h2>📋 استمارة اللجنة الإدارية (3/3)</h2><p style="color:#718096;">لم تُعبأ بعد.</p></div>
+{% endif %}
+
+<div class="btn-group">
+  <a href="/dashboard" class="btn btn-secondary">← العودة إلى القائمة</a>
+  {% if session.get("logged_in") %}
+  {% if a2 %}<a href="/form3/{{ a1['id'] }}" class="btn btn-primary">📋 استمارة 3 — المراجعة الإدارية</a>
+  {% else %}<a href="/form2/{{ a1['id'] }}" class="btn btn-primary">📋 استمارة 2 — التقييم التقني</a>
+  {% endif %}
+  <a href="/edit/{{ a1['id'] }}" class="btn btn-secondary">✏️ تعديل بيانات المتقدّم</a>
+  {% endif %}
+  <a href="/export/applicant/{{ a1['id'] if a1 else 0 }}" class="btn btn-success">📥 تصدير هذا المتقدم إكسل</a>
+  <a href="/delete/{{ a1['id'] if a1 else 0 }}" class="btn btn-primary" onclick="return confirm('هل تريد حذف هذا المتقدم بالكامل (كل الاستمارات؟')" style="margin-right:auto;">🗑 حذف بالكامل</a>
+</div>
+{% endblock %}

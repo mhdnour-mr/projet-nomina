@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}الإعدادات{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>⚙️ إعدادات الحساب</h2>
+  <p style="color:#718096; margin-bottom:18px;">تغيير كلمة مرور حساب الإدارة (admin).</p>
+  {% if msg %}
+  <div class="alert {{ 'alert-success' if msg.startswith('✅') else 'alert-success' }}" style="{{ 'background:#f0fff4;border-color:#c6f6d5' if msg.startswith('✅') else 'background:#fff5f5;border-color:#fed7d7' }}">
+    <p>{{ msg }}</p>
+  </div>
+  {% endif %}
+  <form method="POST" action="/admin/settings" style="max-width:420px;">
+    <div class="form-group"><label>كلمة المرور الحالية</label><input type="password" name="current" required></div>
+    <div class="form-group"><label>كلمة المرور الجديدة (6 خانات على الأقل)</label><input type="password" name="new" required></div>
+    <div class="form-group"><label>تأكيد كلمة المرور الجديدة</label><input type="password" name="confirm" required></div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-success">💾 حفظ التغييرات</button>
+      <a href="/dashboard" class="btn btn-secondary">← العودة</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

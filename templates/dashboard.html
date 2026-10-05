@@ -3,19 +3,31 @@
 {% block content %}
 <div class="card">
   <h2>📋 الاستمارات المعبأة ({{ rows|length }})</h2>
+  <form method="GET" action="/dashboard" style="margin-bottom:15px;">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input type="text" name="q" value="{{ q or '' }}" placeholder="ابحث بالاسم..." style="flex:1;">
+      <button type="submit" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">🔍 بحث</button>
+      {% if q %}<a href="/dashboard" class="btn btn-secondary" style="padding:8px 18px;font-size:13px;">✖ إلغاء</a>{% endif %}
+    </div>
+  </form>
   {% if rows %}
   <table>
-    <thead><tr><th>#</th><th>الاسم</th><th>الجنس</th><th>تاريخ الميلاد</th><th>تاريخ التعبئة</th><th>إجراء</th></tr></thead>
+    <thead><tr><th>#</th><th>الحالة</th><th>الاسم</th><th>الجنس</th><th>تاريخ الميلاد</th><th>تاريخ التعبئة</th><th>إجراء</th></tr></thead>
     <tbody>
     {% for r in rows %}
     <tr>
       <td>{{ r['id'] }}</td>
+      <td>
+        <span class="badge badge-green" style="margin-left:4px;">📝 مُعلق</span>
+        {% if r['tech_filled'] %}<span class="badge badge-blue">📋 تقييم تقني ✓</span>{% endif %}
+        {% if r['admin_filled'] %}<span class="badge badge-blue">📋 مراجعة إدارية ✓</span>{% endif %}
+      </td>
       <td>{{ r['full_name'] }}</td>
       <td>{{ r['gender'] }}</td>
       <td>{{ r['birth_date'] }}</td>
       <td>{{ r['form_date'] }}</td>
       <td>
-        <a href="/view/{{ r['id'] }}" class="btn btn-primary" style="padding:5px 14px; font-size:12px;">عرض</a>
+        <a href="/applicant/{{ r['id'] }}" class="btn btn-primary" style="padding:5px 14px; font-size:12px;">عرض</a>
         <a href="/delete/{{ r['id'] }}" class="btn btn-secondary" style="padding:5px 14px; font-size:12px;" onclick="return confirm('هل تريد الحذف؟')">حذف</a>
       </td>
     </tr>
@@ -23,7 +35,7 @@
     </tbody>
   </table>
   {% else %}
-  <p style="color:#718096; text-align:center; padding:20px;">لا توجد بيانات بعد.</p>
+  <p style="color:#718096; text-align:center; padding:20px;">{% if q %}لا توجد نتائج لـ "{{ q }}"{% else %}لا توجد بيانات بعد.{% endif %}</p>
   {% endif %}
 </div>
 {% endblock %}

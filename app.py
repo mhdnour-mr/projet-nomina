@@ -6,8 +6,10 @@ from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 
 app = Flask(__name__)
 BASE = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE, "nomina.db")
-app.secret_key = os.urandom(24).hex()
+DATA_DIR = os.environ.get("DATA_DIR", BASE)
+os.makedirs(DATA_DIR, exist_ok=True)
+DB_PATH = os.path.join(DATA_DIR, "nomina.db")
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24).hex()
 
 def login_required(f):
     from functools import wraps
@@ -120,12 +122,13 @@ def form1():
         db.commit()
         applicant_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
         db.close()
-        return redirect(url_for("form2", applicant_id=applicant_id))
+        return redirect(url_for("complete"))
     db.close()
     return render_template("form1.html")
 
-# ---------- FORM 2 ----------
+# ---------- FORM 2 (committee-only) ----------
 @app.route("/form2/<int:applicant_id>", methods=["GET", "POST"])
+@login_required
 def form2(applicant_id):
     db = get_db()
     if request.method == "POST":
@@ -146,8 +149,9 @@ def form2(applicant_id):
     db.close()
     return render_template("form2.html", applicant_id=applicant_id, app1=app1)
 
-# ---------- FORM 3 ----------
+# ---------- FORM 3 (committee-only) ----------
 @app.route("/form3/<int:applicant_id>", methods=["GET", "POST"])
+@login_required
 def form3(applicant_id):
     db = get_db()
     if request.method == "POST":
@@ -172,7 +176,7 @@ def form3(applicant_id):
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", data)
         db.commit()
         db.close()
-        return redirect(url_for("complete"))
+        return redirect(url_for("applicant_detail", id=applicant_id))
     app1 = db.execute("SELECT full_name FROM form1_applicant WHERE id=?", (applicant_id,)).fetchone()
     db.close()
     return render_template("form3.html", applicant_id=applicant_id, app1=app1)
@@ -181,14 +185,85 @@ def form3(applicant_id):
 def complete():
     return render_template("complete.html")
 
+# ---------- ADMIN SETTINGS ----------
+@app.route("/admin/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    db = get_db()
+    msg = ""
+    if request.method == "POST":
+        cur = request.form.get("current", "")
+        new = request.form.get("new", "")
+        conf = request.form.get("confirm", "")
+        row = db.execute("SELECT password FROM users WHERE username=?", ("admin",)).fetchone()
+        if not row or row["password"] != hashlib.sha256(cur.encode()).hexdigest():
+            msg = "❌ كلمة المرور الحالية غير صحيحة"
+        elif len(new) < 6:
+            msg = "❌ كلمة المرور الجديدة يجب أن تكون 6 خانات على الأقل"
+        elif new != conf:
+            msg = "❌ كلمتا المرور غير متطابقتين"
+        else:
+            db.execute("UPDATE users SET password=? WHERE username=?",
+                       (hashlib.sha256(new.encode()).hexdigest(), "admin"))
+            db.commit()
+            msg = "✅ تم تحديث كلمة المرور بنجاح"
+    db.close()
+    return render_template("settings.html", msg=msg)
+
+
+# ---------- EDIT APPLICANT (committee) ----------
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_applicant(id):
+    keys = ["full_name","mother_name","gender","birth_date","birth_country","residence",
+            "religion","marital_status","children_count","health_status","injury_type",
+            "employment_status","ready_to_work","travel_allowed","address","phone","whatsapp","email",
+            "education","field","specialty","institution","graduation_rate","graduation_year",
+            "work_name","work_title","work_start","work_end","work_reason","course_type",
+            "course_level","course_duration","course_date","course_org","course_doc",
+            "signature","form_date"]
+    db = get_db()
+    if request.method == "POST":
+        data = {k: request.form.get(k, "") for k in keys}
+        errors = []
+        if not data["full_name"] or len(data["full_name"]) < 3:
+            errors.append("الاسم الثلاثي مطلوب (3 أحرف على الأقل)")
+        if data["phone"] and not data["phone"].replace(" ", "").isdigit():
+            errors.append("رقم الهاتف أرقام فقط")
+        if data["email"] and "@" not in data["email"]:
+            errors.append("البريد إلكتروني غير صحيح")
+        if errors:
+            db.close()
+            return render_template("form1.html", data=data, edit_id=id, errors=errors)
+        set_clause = ",".join([f"{k}=?" for k in keys])
+        db.execute(f"UPDATE form1_applicant SET {set_clause} WHERE id=?", tuple(data.values()) + (id,))
+        db.commit()
+        db.close()
+        return redirect(url_for("applicant_detail", id=id))
+    row = db.execute("SELECT * FROM form1_applicant WHERE id=?", (id,)).fetchone()
+    db.close()
+    return render_template("form1.html", data=row, edit_id=id)
+
+
 # ---------- DASHBOARD ----------
 @app.route("/dashboard")
 @login_required
 def dashboard():
     db = get_db()
-    rows = db.execute("SELECT * FROM form1_applicant ORDER BY created_at DESC").fetchall()
+    q = request.args.get("q", "").strip()
+    base = """SELECT f1.*, 
+      CASE WHEN f2.id IS NOT NULL THEN 1 ELSE 0 END AS tech_filled,
+      CASE WHEN f3.id IS NOT NULL THEN 1 ELSE 0 END AS admin_filled
+      FROM form1_applicant f1
+      LEFT JOIN form2_technical f2 ON f2.applicant_id=f1.id
+      LEFT JOIN form3_administrative f3 ON f3.applicant_id=f1.id
+      """
+    if q:
+        rows = db.execute(base + "WHERE f1.full_name LIKE ? ORDER BY f1.created_at DESC", (f"%{q}%",)).fetchall()
+    else:
+        rows = db.execute(base + "ORDER BY f1.created_at DESC").fetchall()
     db.close()
-    return render_template("dashboard.html", rows=rows, title="الاستمارات المعبأة")
+    return render_template("dashboard.html", rows=rows, title="الاستمارات المعبأة", q=q)
 
 @app.route("/view/<int:id>")
 @login_required
@@ -198,16 +273,59 @@ def view_form1(id):
     db.close()
     return render_template("view_form1.html", r=row)
 
+@app.route("/applicant/<int:id>")
+@login_required
+def applicant_detail(id):
+    db = get_db()
+    a1 = db.execute("SELECT * FROM form1_applicant WHERE id=?", (id,)).fetchone()
+    a2 = db.execute("SELECT * FROM form2_technical WHERE applicant_id=?", (id,)).fetchone()
+    a3 = db.execute("SELECT * FROM form3_administrative WHERE applicant_id=?", (id,)).fetchone()
+    db.close()
+    return render_template("applicant_detail.html", a1=a1, a2=a2, a3=a3)
+
 @app.route("/delete/<int:id>")
 @login_required
 def delete(id):
     db = get_db()
     db.execute("DELETE FROM form1_applicant WHERE id=?", (id,))
+    db.execute("DELETE FROM form2_technical WHERE applicant_id=?", (id,))
+    db.execute("DELETE FROM form3_administrative WHERE applicant_id=?", (id,))
     db.commit()
     db.close()
     return redirect(url_for("dashboard"))
 
 # ---------- EXPORT EXCEL ----------
+@app.route("/export/applicant/<int:id>")
+@login_required
+def export_applicant(id):
+    db = get_db()
+    a1 = db.execute("SELECT * FROM form1_applicant WHERE id=?", (id,)).fetchone()
+    a2 = db.execute("SELECT * FROM form2_technical WHERE applicant_id=?", (id,)).fetchone()
+    a3 = db.execute("SELECT * FROM form3_administrative WHERE applicant_id=?", (id,)).fetchone()
+    db.close()
+    wb = Workbook()
+    ws1 = wb.active
+    ws1.title = "المتقدم"
+    ws1.append(["الحقل","القيمة"])
+    for k in a1.keys():
+        ws1.append([k, a1[k] or ""])
+    if a2:
+        ws2 = wb.create_sheet("التخصيص الفني")
+        ws2.append(["الحقل","القيمة"])
+        for k in a2.keys():
+            ws2.append([k, a2[k] or ""])
+    if a3:
+        ws3 = wb.create_sheet("الإداري")
+        ws3.append(["الحقل","القيمة"])
+        for k in a3.keys():
+            ws3.append([k, a3[k] or ""])
+    buf = io.BytesIO()
+    wb.save(buf); buf.seek(0)
+    nm = a1["full_name"] if a1 else "applicant"
+    safe = "".join(c if c not in r'\/:*?"<>|' else "_" for c in nm).strip()[:50] or "applicant"
+    return send_file(buf, download_name=f"{safe}_applicant.xlsx", as_attachment=True,
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
 @app.route("/export")
 @login_required
 def export():

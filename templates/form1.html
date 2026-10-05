@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}استمارة البيانات الشخصية{% endblock %}
+{% block title %}{{ 'تعديل بيانات المتقدّف' if edit_id else 'استمارة البيانات الشخصية' }}{% endblock %}
 {% block content %}
 <div class="card">
-  <h2>📋 استمارة البيانات الشخصية (1/3)</h2>
+  <h2>📋 {{ 'تعديل بيانات المتقدّف (1/3)' if edit_id else 'استمارة البيانات الشخصية (1/3)' }}</h2>
   {% if errors %}
   <div class="alert alert-success">
     {% for e in errors %}
@@ -12,70 +12,75 @@
   {% endif %}
   <form method="POST">
     <div class="form-grid">
-      <div class="form-group full"><label>الاسم الثلاثي الكامل *</label><input name="full_name" required></div>
-      <div class="form-group"><label>اسم الأم (الكامل)</label><input name="mother_name"></div>
+      <div class="form-group full"><label>الاسم الثلاثي الكامل *</label><input name="full_name" required value="{{ data['full_name'] if data and data['full_name'] else '' }}"></div>
+      <div class="form-group"><label>اسم الأم (الكامل)</label><input name="mother_name" value="{{ data['mother_name'] if data and data['mother_name'] else '' }}"></div>
       <div class="form-group">
         <label>الجنس</label>
         <div class="checkbox-group">
-          <label><input type="radio" name="gender" value="ذكر"> ذكر</label>
-          <label><input type="radio" name="gender" value="أنثى"> أنثى</label>
+          <label><input type="radio" name="gender" value="ذكر" {% if data and data['gender']=='ذكر' %}checked{% endif %}> ذكر</label>
+          <label><input type="radio" name="gender" value="أنثى" {% if data and data['gender']=='أنثى' %}checked{% endif %}> أنثى</label>
         </div>
       </div>
-      <div class="form-group"><label>تاريخ الميلاد</label><input name="birth_date" placeholder="يوم/شهر/سنة"></div>
-      <div class="form-group"><label>البلد الأصلي</label><input name="birth_country"></div>
-      <div class="form-group"><label>مكان الإقامة</label><input name="residence"></div>
-      <div class="form-group"><label>الديانة</label><input name="religion"></div>
-      <div class="form-group"><label>الحالة الاجتماعية</label><input name="marital_status"></div>
-      <div class="form-group"><label>عدد الأولاد</label><input name="children_count" type="number"></div>
+      <div class="form-group"><label>تاريخ الميلاد</label><input name="birth_date" placeholder="يوم/شهر/سنة" value="{{ data['birth_date'] if data and data['birth_date'] else '' }}"></div>
+      <div class="form-group"><label>البلد الأصلي</label><input name="birth_country" value="{{ data['birth_country'] if data and data['birth_country'] else '' }}"></div>
+      <div class="form-group"><label>مكان الإقامة</label><input name="residence" value="{{ data['residence'] if data and data['residence'] else '' }}"></div>
+      <div class="form-group"><label>الديانة</label><input name="religion" value="{{ data['religion'] if data and data['religion'] else '' }}"></div>
+      <div class="form-group"><label>الحالة الاجتماعية</label><input name="marital_status" value="{{ data['marital_status'] if data and data['marital_status'] else '' }}"></div>
+      <div class="form-group"><label>عدد الأولاد</label><input name="children_count" type="number" value="{{ data['children_count'] if data and data['children_count'] else '' }}"></div>
       <div class="form-group">
         <label>الوضع الصحي (سليم البنية؟)</label>
         <div class="checkbox-group">
-          <label><input type="radio" name="health_status" value="سليم"> نعم</label>
-          <label><input type="radio" name="health_status" value="غير سليم"> لا</label>
+          <label><input type="radio" name="health_status" value="سليم" {% if data and data['health_status']=='سليم' %}checked{% endif %}> نعم</label>
+          <label><input type="radio" name="health_status" value="غير سليم" {% if data and data['health_status']=='غير سليم' %}checked{% endif %}> لا</label>
         </div>
       </div>
-      <div class="form-group"><label>نوع الإصابة</label><input name="injury_type"></div>
+      <div class="form-group"><label>نوع الإصابة</label><input name="injury_type" value="{{ data['injury_type'] if data and data['injury_type'] else '' }}"></div>
       <div class="form-group">
         <label>الوضع الوظيفي الحالي</label>
         <div class="checkbox-group">
-          <label><input type="radio" name="employment_status" value="أعمل"> أعمل</label>
-          <label><input type="radio" name="employment_status" value="لا أعمل"> لا أعمل</label>
+          <label><input type="radio" name="employment_status" value="أعمل" {% if data and data['employment_status']=='أعمل' %}checked{% endif %}> أعمل</label>
+          <label><input type="radio" name="employment_status" value="لا أعمل" {% if data and data['employment_status']=='لا أعمل' %}checked{% endif %}> لا أعمل</label>
         </div>
       </div>
       <div class="form-group">
         <label>الجاهزية للبدء بالعمل</label>
         <div class="checkbox-group">
-          <label><input type="radio" name="ready_to_work" value="نعم"> نعم</label>
-          <label><input type="radio" name="ready_to_work" value="لا"> لا</label>
+          <label><input type="radio" name="ready_to_work" value="نعم" {% if data and data['ready_to_work']=='نعم' %}checked{% endif %}> نعم</label>
+          <label><input type="radio" name="ready_to_work" value="لا" {% if data and data['ready_to_work']=='لا' %}checked{% endif %}> لا</label>
         </div>
       </div>
-      <div class="form-group"><label>قابلية السفر</label><input name="travel_allowed"></div>
-      <div class="form-group full"><label>العنوان الحالي المفصل</label><input name="address"></div>
-      <div class="form-group"><label>رقم الهاتف المحمول</label><input name="phone"></div>
-      <div class="form-group"><label>معرف تواصل (واتساب، تلغرام)</label><input name="whatsapp"></div>
-      <div class="form-group"><label>البريد الإلكتروني (فعّال)</label><input name="email"></div>
-      <div class="form-group"><label>التحصيل العلمي</label><input name="education"></div>
-      <div class="form-group"><label>الفرع</label><input name="field"></div>
-      <div class="form-group"><label>التخصص</label><input name="specialty"></div>
-      <div class="form-group"><label>اسم المؤسسة التعليمية</label><input name="institution"></div>
-      <div class="form-group"><label>معدل التخرج</label><input name="graduation_rate"></div>
-      <div class="form-group"><label>سنة التخرج</label><input name="graduation_year"></div>
-      <div class="form-group"><label>اسم جهة العمل</label><input name="work_name"></div>
-      <div class="form-group"><label>طبيعة العمل/المسمى الوظيفي</label><input name="work_title"></div>
-      <div class="form-group"><label>تاريخ البدء</label><input name="work_start" placeholder="يوم/شهر/سنة"></div>
-      <div class="form-group"><label>تاريخ الانتهاء</label><input name="work_end" placeholder="يوم/شهر/سنة"></div>
-      <div class="form-group full"><label>سبب ترك العمل</label><input name="work_reason"></div>
-      <div class="form-group"><label>نوع الدورة / المهارة</label><input name="course_type"></div>
-      <div class="form-group"><label>المستوى</label><input name="course_level"></div>
-      <div class="form-group"><label>مدة الدورة</label><input name="course_duration"></div>
-      <div class="form-group"><label>تاريخ الدورة</label><input name="course_date"></div>
-      <div class="form-group"><label>الجهة المانحة</label><input name="course_org"></div>
-      <div class="form-group"><label>وجود وثيقة؟</label><input name="course_doc"></div>
-      <div class="form-group"><label>التوقيع</label><input name="signature"></div>
-      <div class="form-group"><label>تاريخ تعبئة الإستمارة</label><input name="form_date" placeholder="يوم/شهر/سنة"></div>
+      <div class="form-group"><label>قابلية السفر</label><input name="travel_allowed" value="{{ data['travel_allowed'] if data and data['travel_allowed'] else '' }}"></div>
+      <div class="form-group full"><label>العنوان الحالي المفصل</label><input name="address" value="{{ data['address'] if data and data['address'] else '' }}"></div>
+      <div class="form-group"><label>رقم الهاتف المحمول</label><input name="phone" value="{{ data['phone'] if data and data['phone'] else '' }}"></div>
+      <div class="form-group"><label>معرف تواصل (واتساب، تلغرام)</label><input name="whatsapp" value="{{ data['whatsapp'] if data and data['whatsapp'] else '' }}"></div>
+      <div class="form-group"><label>البريد الإلكتروني (فعّال)</label><input name="email" value="{{ data['email'] if data and data['email'] else '' }}"></div>
+      <div class="form-group"><label>التحصيل العلمي</label><input name="education" value="{{ data['education'] if data and data['education'] else '' }}"></div>
+      <div class="form-group"><label>الفرع</label><input name="field" value="{{ data['field'] if data and data['field'] else '' }}"></div>
+      <div class="form-group"><label>التخصص</label><input name="specialty" value="{{ data['specialty'] if data and data['specialty'] else '' }}"></div>
+      <div class="form-group"><label>اسم المؤسسة التعليمية</label><input name="institution" value="{{ data['institution'] if data and data['institution'] else '' }}"></div>
+      <div class="form-group"><label>معدل التخرج</label><input name="graduation_rate" value="{{ data['graduation_rate'] if data and data['graduation_rate'] else '' }}"></div>
+      <div class="form-group"><label>سنة التخرج</label><input name="graduation_year" value="{{ data['graduation_year'] if data and data['graduation_year'] else '' }}"></div>
+      <div class="form-group"><label>اسم جهة العمل</label><input name="work_name" value="{{ data['work_name'] if data and data['work_name'] else '' }}"></div>
+      <div class="form-group"><label>طبيعة العمل/المسمى الوظيفي</label><input name="work_title" value="{{ data['work_title'] if data and data['work_title'] else '' }}"></div>
+      <div class="form-group"><label>تاريخ البدء</label><input name="work_start" placeholder="يوم/شهر/سنة" value="{{ data['work_start'] if data and data['work_start'] else '' }}"></div>
+      <div class="form-group"><label>تاريخ الانتهاء</label><input name="work_end" placeholder="يوم/شهر/سنة" value="{{ data['work_end'] if data and data['work_end'] else '' }}"></div>
+      <div class="form-group full"><label>سبب ترك العمل</label><input name="work_reason" value="{{ data['work_reason'] if data and data['work_reason'] else '' }}"></div>
+      <div class="form-group"><label>نوع الدورة / المهارة</label><input name="course_type" value="{{ data['course_type'] if data and data['course_type'] else '' }}"></div>
+      <div class="form-group"><label>المستوى</label><input name="course_level" value="{{ data['course_level'] if data and data['course_level'] else '' }}"></div>
+      <div class="form-group"><label>مدة الدورة</label><input name="course_duration" value="{{ data['course_duration'] if data and data['course_duration'] else '' }}"></div>
+      <div class="form-group"><label>تاريخ الدورة</label><input name="course_date" value="{{ data['course_date'] if data and data['course_date'] else '' }}"></div>
+      <div class="form-group"><label>الجهة المانحة</label><input name="course_org" value="{{ data['course_org'] if data and data['course_org'] else '' }}"></div>
+      <div class="form-group"><label>وجود وثيقة؟</label><input name="course_doc" value="{{ data['course_doc'] if data and data['course_doc'] else '' }}"></div>
+      <div class="form-group"><label>التوقيع</label><input name="signature" value="{{ data['signature'] if data and data['signature'] else '' }}"></div>
+      <div class="form-group"><label>تاريخ تعبئة الإستمارة</label><input name="form_date" placeholder="يوم/شهر/سنة" value="{{ data['form_date'] if data and data['form_date'] else '' }}"></div>
     </div>
     <div class="btn-group">
+      {% if edit_id %}
+      <button type="submit" class="btn btn-success">💾 حفظ التعديل</button>
+      <a href="/applicant/{{ edit_id }}" class="btn btn-secondary">← العودة</a>
+      {% else %}
       <button type="submit" class="btn btn-primary">التالي ➜ استمارة اللجنة التخصصية</button>
+      {% endif %}
     </div>
   </form>
 </div>

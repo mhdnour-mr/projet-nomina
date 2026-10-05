@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% block title %}اكتمل التسجيل{% endblock %}
+{% block title %}تم الإرسال{% endblock %}
 {% block content %}
 <div class="card" style="text-align:center;">
   <div style="font-size:60px;">✅</div>
-  <h2>تم إرسال النماذج بنجاح!</h2>
-  <p style="color:#718096; margin:10px 0;">تم حفظ البيانات في قاعدة البيانات.</p>
-  <a href="/" class="btn btn-primary">نموذج جديد</a>
-  <a href="/dashboard" class="btn btn-secondary">عرض القائمة</a>
+  <h2>تم استلام بياناتك الأساسية!</h2>
+  <p style="color:#718096; margin:10px 0;">تم حفظ بياناتك في قاعدة البيانات. سيقوم فريق التوظيف/اللجان لاحقاً بملء التقييم التقني والمراجعة الإدارية.</p>
+  <p style="color:#718096; margin-top:20px; font-size:13px;">يمكنك ملء استمارة جديدة، أو عبر <a href="/login">تسجيل الدخول</a> لو أنت من اللجان.</p>
+  <a href="/form1" class="btn btn-primary">📝 استمارة جديدة</a>
+  <a href="/login" class="btn btn-secondary">🔐 دخول اللجان</a>
 </div>
 {% endblock %}
